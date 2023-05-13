@@ -21,17 +21,30 @@ imagesList.addEventListener("click", onImageClick);
 function onImageClick (event) {
     event.preventDefault();
 
+    const instance = basicLightbox.create(`<img src="${event.target.dataset.source}">`, {
+            onShow: (instance) => {
+                window.addEventListener("keydown", event);
+                console.log('onShow', instance);
+            },
+            onClose: (instance) => {
+                window.removeEventListener("keydown", event);
+                console.log('onClose', instance);
+            }
+        }
+    );
+
     if (event.target.classList.value === "gallery__image") {
         const instance = basicLightbox.create(`<img src="${event.target.dataset.source}">`);
         instance.show()
 
-        imagesList.addEventListener("keydown", (event) => {
+        window.addEventListener("keydown", (event) => {
             if(instance.visible() === true){
                 if(event.key === "Escape"){
                     instance.close();
                 }
             }
         })
+
     };
 };
 
